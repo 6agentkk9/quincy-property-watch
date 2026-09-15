@@ -4,533 +4,109 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Quincy Property Watch</title>
-<meta name="description" content="Live dashboard for 6–10k SF industrial / warehouse properties for sale near Quincy, MA">
+<meta name="description" content="Quincy MA industrial watch. Updated Tue Sep 15, 2026 1:20am ET.">
 <style>
-  :root {
-    --bg: #0b0f14;
-    --surface: #141b24;
-    --surface2: #1c2633;
-    --border: #2a3647;
-    --text: #e8eef5;
-    --muted: #8b9bb0;
-    --accent: #3b82f6;
-    --good: #22c55e;
-    --warn: #f59e0b;
-    --bad: #ef4444;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font: 14px/1.5 "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
-    min-height: 100vh;
-  }
-
-  /* Header */
-  header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 14px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    position: sticky;
-    top: 0;
-    z-index: 50;
-  }
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .brand h1 {
-    font-size: 18px;
-    font-weight: 650;
-    letter-spacing: -0.02em;
-  }
-  .live-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(34,197,94,0.12);
-    color: #4ade80;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 999px;
-    letter-spacing: 0.02em;
-  }
-  .live-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #4ade80;
-    box-shadow: 0 0 0 3px rgba(34,197,94,0.25);
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
-  .updated {
-    color: var(--muted);
-    font-size: 12px;
-  }
-
-  /* Tabs */
-  .tabs {
-    display: flex;
-    gap: 2px;
-    padding: 10px 20px 0;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    overflow-x: auto;
-  }
-  .tab {
-    padding: 9px 16px;
-    border-radius: 8px 8px 0 0;
-    color: var(--muted);
-    cursor: pointer;
-    font-weight: 500;
-    font-size: 13px;
-    border: 1px solid transparent;
-    border-bottom: none;
-    white-space: nowrap;
-    user-select: none;
-  }
-  .tab:hover { color: var(--text); background: var(--surface); }
-  .tab.active {
-    background: var(--surface);
-    color: var(--text);
-    border-color: var(--border);
-  }
-
-  main { padding: 18px 20px 48px; max-width: 1280px; margin: 0 auto; }
-  .panel { display: none; }
-  .panel.active { display: block; }
-
-  /* Metrics */
-  .metrics {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 10px;
-    margin-bottom: 16px;
-  }
-  .metric {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px;
-  }
-  .metric .label { color: var(--muted); font-size: 11px; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.04em; }
-  .metric .value { font-size: 22px; font-weight: 700; letter-spacing: -0.03em; }
-  .metric .sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
-  .metric.good .value { color: var(--good); }
-  .metric.bad .value { color: var(--bad); }
-
-  /* Cards & common */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px 16px;
-    margin-bottom: 10px;
-  }
-  .card h3 { font-size: 14px; margin-bottom: 4px; }
-  .card .meta { color: var(--muted); font-size: 12px; margin-bottom: 8px; }
-
-  .pills { display: flex; flex-wrap: wrap; gap: 5px; margin: 6px 0; }
-  .pill {
-    font-size: 11px;
-    padding: 2px 8px;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    font-weight: 500;
-  }
-  .pill.yes { background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.3); color: #4ade80; }
-  .pill.no { background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.3); color: #f87171; }
-  .pill.unk { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.3); color: #fbbf24; }
-
-  .banner {
-    background: rgba(245,158,11,0.07);
-    border: 1px solid rgba(245,158,11,0.22);
-    border-radius: 10px;
-    padding: 11px 13px;
-    margin-bottom: 14px;
-    font-size: 12.5px;
-    color: #fcd34d;
-    line-height: 1.55;
-  }
-
-  /* Properties layout */
-  .props-layout {
-    display: grid;
-    grid-template-columns: 260px 1fr;
-    gap: 14px;
-    min-height: 420px;
-  }
-  @media (max-width: 760px) {
-    .props-layout { grid-template-columns: 1fr; }
-  }
-  .prop-list {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    max-height: 70vh;
-    overflow-y: auto;
-  }
-  .prop-item {
-    padding: 11px 13px;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    transition: background 0.12s;
-  }
-  .prop-item:last-child { border-bottom: none; }
-  .prop-item:hover { background: var(--surface2); }
-  .prop-item.active {
-    background: rgba(59,130,246,0.1);
-    border-left: 3px solid var(--accent);
-  }
-  .prop-item .addr { font-weight: 600; font-size: 13px; }
-  .prop-item .sub { color: var(--muted); font-size: 11px; margin-top: 2px; }
-  .prop-detail {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 18px;
-  }
-  .prop-detail h2 { font-size: 17px; margin-bottom: 3px; }
-  .prop-detail .status-line { color: var(--muted); font-size: 12.5px; margin-bottom: 12px; }
-  dl {
-    display: grid;
-    grid-template-columns: 120px 1fr;
-    gap: 5px 12px;
-    margin: 12px 0;
-  }
-  dt { color: var(--muted); font-size: 12px; }
-  dd { font-size: 13px; }
-  a { color: #60a5fa; text-decoration: none; }
-  a:hover { text-decoration: underline; }
-  .fails { color: #f87171; font-size: 12.5px; margin-top: 8px; }
-
-  /* AI */
-  .ai-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px 16px;
-    margin-bottom: 10px;
-    display: grid;
-    grid-template-columns: 52px 1fr;
-    gap: 12px;
-    align-items: start;
-  }
-  .ai-score {
-    width: 52px;
-    height: 52px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 17px;
-  }
-  .ai-score.high { background: rgba(34,197,94,0.15); color: #4ade80; }
-  .ai-score.mid { background: rgba(245,158,11,0.15); color: #fbbf24; }
-  .ai-score.low { background: rgba(239,68,68,0.12); color: #f87171; }
-  .ai-body h3 { font-size: 13.5px; margin-bottom: 3px; }
-  .ai-body .rec { font-size: 12.5px; color: var(--muted); margin-bottom: 4px; }
-  .ai-body .reason { font-size: 11.5px; color: #94a3b8; }
-
-  /* Feed */
-  .feed {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  .feed-item {
-    display: flex;
-    gap: 11px;
-    padding: 11px 14px;
-    border-bottom: 1px solid var(--border);
-  }
-  .feed-item:last-child { border-bottom: none; }
-  .feed-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--accent);
-    margin-top: 5px;
-    flex-shrink: 0;
-  }
-  .feed-dot.warn { background: var(--warn); }
-  .feed-dot.bad { background: var(--bad); }
-  .feed-dot.good { background: var(--good); }
-  .feed-time { color: var(--muted); font-size: 11px; margin-bottom: 1px; }
-  .feed-text { font-size: 12.5px; }
-
-  .empty { color: var(--muted); padding: 36px; text-align: center; }
-
-  footer {
-    text-align: center;
-    padding: 20px;
-    color: var(--muted);
-    font-size: 11.5px;
-    border-top: 1px solid var(--border);
-  }
+:root{--bg:#0b0f14;--card:#141b24;--line:#2a3647;--text:#e8eef5;--muted:#8b9bb0;--good:#22c55e;--bad:#ef4444;--warn:#f59e0b;--accent:#3b82f6}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font:14px/1.5 Inter,Segoe UI,system-ui,sans-serif}
+header{background:var(--card);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;position:sticky;top:0;z-index:20}
+h1{font-size:18px}
+.live{display:inline-flex;align-items:center;gap:6px;background:rgba(34,197,94,.12);color:#4ade80;font-size:11px;font-weight:600;padding:4px 10px;border-radius:999px}
+.dot{width:7px;height:7px;border-radius:50%;background:#4ade80}
+.updated{color:var(--muted);font-size:12px}
+.tabs{display:flex;gap:4px;padding:10px 20px 0;overflow:auto}
+.tab{padding:8px 14px;color:var(--muted);cursor:pointer;border-radius:8px 8px 0 0}
+.tab.on{background:var(--card);color:var(--text)}
+main{max-width:1100px;margin:0 auto;padding:18px 20px 48px}
+.panel{display:none}.panel.on{display:block}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+.metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.metric .l{color:var(--muted);font-size:11px;text-transform:uppercase}
+.metric .v{font-size:22px;font-weight:700}
+.banner{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);color:#fcd34d;border-radius:10px;padding:11px 13px;margin-bottom:14px;font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:10px}
+.meta{color:var(--muted);font-size:12px;margin:4px 0}
+.pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);margin:0 4px 4px 0}
+.yes{color:#4ade80;background:rgba(34,197,94,.12)}
+.no{color:#f87171;background:rgba(239,68,68,.12)}
+.unk{color:#fbbf24;background:rgba(245,158,11,.12)}
+.layout{display:grid;grid-template-columns:240px 1fr;gap:12px}
+@media(max-width:740px){.layout{grid-template-columns:1fr}}
+.plist{background:var(--card);border:1px solid var(--line);border-radius:12px;max-height:70vh;overflow:auto}
+.pi{padding:10px 12px;border-bottom:1px solid var(--line);cursor:pointer}
+.pi.on{background:rgba(59,130,246,.12);border-left:3px solid var(--accent)}
+.detail{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+dl{display:grid;grid-template-columns:110px 1fr;gap:6px 12px;margin-top:10px}
+dt{color:var(--muted)}a{color:#60a5fa;text-decoration:none}
+.fail{color:#f87171;margin-top:8px;font-size:13px}
+.ai{display:grid;grid-template-columns:52px 1fr;gap:12px}
+.sc{width:52px;height:52px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700}
+.hi{background:rgba(34,197,94,.15);color:#4ade80}.md{background:rgba(245,158,11,.15);color:#fbbf24}.lo{background:rgba(239,68,68,.12);color:#f87171}
+.feed div{padding:10px 12px;border-bottom:1px solid var(--line)}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:20px;border-top:1px solid var(--line)}
 </style>
 </head>
 <body>
 <header>
-  <div class="brand">
+  <div style="display:flex;gap:10px;align-items:center">
     <h1>Quincy Property Watch</h1>
-    <span class="live-badge"><span class="live-dot"></span> LIVE</span>
+    <span class="live"><span class="dot"></span> LIVE</span>
   </div>
-  <div class="updated" id="updatedLabel">—</div>
+  <div class="updated" id="updatedLabel">Loading…</div>
 </header>
-
 <nav class="tabs" id="tabs">
-  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab on" data-tab="overview">Overview</div>
   <div class="tab" data-tab="properties">Properties</div>
   <div class="tab" data-tab="ai">AI Recommendations</div>
   <div class="tab" data-tab="feed">Live Feed</div>
 </nav>
-
 <main>
-  <div class="panel active" id="panel-overview">
-    <div class="metrics" id="metrics"></div>
-    <div class="banner" id="overviewNotes"></div>
-    <div id="overviewCards"></div>
-  </div>
-
-  <div class="panel" id="panel-properties">
-    <div class="props-layout">
-      <div class="prop-list" id="propList"></div>
-      <div class="prop-detail" id="propDetail">
-        <div class="empty">Select a property</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="panel" id="panel-ai">
-    <div class="banner">
-      AI ranks by fit to target: 6–10k SF · 60+ parking · &gt;10 ft ceiling · for sale. Scores are heuristic — always verify with the broker.
-    </div>
-    <div id="aiList"></div>
-  </div>
-
-  <div class="panel" id="panel-feed">
-    <div class="banner">
-      Activity stream from the latest daily check. Data is refreshed automatically each night at 1:00 AM ET.
-    </div>
-    <div class="feed" id="feedList"></div>
-  </div>
+  <div class="panel on" id="panel-overview"><div class="metrics" id="metrics"></div><div class="banner" id="notes"></div><div id="cards"></div></div>
+  <div class="panel" id="panel-properties"><div class="layout"><div class="plist" id="plist"></div><div class="detail" id="detail">Select a property</div></div></div>
+  <div class="panel" id="panel-ai"><div class="banner">Heuristic fit to 6–10k SF · 60+ parking · &gt;10 ft · for sale. Verify with the broker.</div><div id="ai"></div></div>
+  <div class="panel" id="panel-feed"><div class="banner">Nightly 1:00 AM ET check now republishes this GitHub Pages site.</div><div class="card feed" id="feed"></div></div>
 </main>
-
-<footer>
-  Target: 6,000–10,000 SF · 60+ parking · ceiling &gt; 10 ft · for sale · Quincy MA + nearby<br>
-  Data updated by automated daily search · Always verify listings before acting
-</footer>
-
+<footer>6,000–10,000 SF · 60+ parking · ceiling &gt; 10 ft · for sale · Quincy MA + nearby<br>https://6agentkk9.github.io/quincy-property-watch/</footer>
 <script>
-const DATA = {"generated_at":"2026-08-21T20:50:00-04:00","generated_at_et":"Fri Aug 21, 2026 8:50pm ET","criteria":{"location":"Quincy, MA and nearby (Braintree, Weymouth, Milton, Randolph, Holbrook, Avon, Canton, Dorchester)","building_sf_min":6000,"building_sf_max":10000,"parking_min":60,"ceiling_ft_min":10,"status":"for sale"},"strict_match_count":0,"listing_count":4,"notes":["Strict filter: 6,000–10,000 SF AND for sale AND 60+ parking AND ceiling over 10 ft. No listing confirmed on 2026-08-21.","60 parking typically needs roughly 0.5 acre of pavement plus the building, so lots under ~1 acre almost never qualify.","LoopNet search pages often time out without a login. Crexi returned little usable Quincy for-sale inventory in this size band.","Lease-only inventory (not stored as candidates): 30 Woodrock Rd Weymouth 6,000 SF / 20-ft clear; 143 Moore Rd Weymouth 15,000 SF / 18-ft / 26 spaces; ReadySpaces 530 West St Braintree.","A local HTML file cannot pull from the assistant automatically. Refresh loads the JSON dump sent with each daily check."],"listings":[{"id":"loopnet-31381504","address":"90-100 Columbia St","city":"Quincy","state":"MA","zip":"02169","price":3500000,"price_psf":492.68,"building_sf":7104,"lot_acres":0.74,"parking_spaces":24,"parking_type":"Surface","parking_ratio_per_1000":4.12,"ceiling_ft":15,"year_built":1977,"stories":1,"property_type":"Industrial","subtype":"Manufacturing","building_class":"C","zoning":"INDA","tenancy":"Single","dock_high_doors":1,"drive_in_doors":null,"sale_type":"Investment","status":"Off market / uncertain — Cityfeet showed OFF MARKET on 2026-08-21; LoopNet still had a for-sale page earlier.","listed":"for sale (was)","broker":"SAB Capital","sources":["https://www.loopnet.com/Listing/90-100-Columbia-St-Quincy-MA/31381504/","https://www.cityfeet.com/cont/listing/90-100-columbia-st-quincy-ma-02169/cs31381504"],"summary":"1-story manufacturing building on 0.74 acres about 8–9 miles south of downtown Boston. 15-ft clear height and one dock-high door. Parking listed as 24 surface spaces.","meets_sf":true,"meets_parking":false,"meets_ceiling":true,"meets_sale":false,"strict_match":false,"fail_reasons":["parking 24 (need 60+)","Cityfeet marked off market"]},{"id":"mls-73528185","address":"80 Sagamore St","city":"Quincy","state":"MA","zip":"02171","price":1350000,"price_psf":225.53,"building_sf":5986,"lot_acres":0.16,"parking_spaces":null,"parking_type":null,"parking_ratio_per_1000":null,"ceiling_ft":null,"year_built":1950,"stories":1,"property_type":"Commercial","subtype":"Office / retail","building_class":null,"zoning":null,"tenancy":null,"dock_high_doors":0,"drive_in_doors":1,"sale_type":"For sale / for lease","status":"MLS Active as of 2026-08-21; LandVest also showed Under Agreement on another listing ID.","listed":"for sale","broker":"LandVest, Inc. (David Killen)","sources":["https://www.landvest.com/commercial/int/ma5355/80-sagamore-st-quincy-ma-02171","https://mytownandcountryrealty.com/ma-real-estate/quincy/80-sagamore-st-mls-73528185"],"summary":"5,986 SF single-story office/retail with retail frontage, skylights, and a drive-in delivery bay. 0.16-acre lot (6,924 SF) is too small for 60 parking spaces. Also offered for lease at $17.50/SF. Minutes from North Quincy T.","meets_sf":false,"meets_parking":false,"meets_ceiling":null,"meets_sale":true,"strict_match":false,"fail_reasons":["5,986 SF is under 6,000","0.16-acre lot cannot support 60 parking","ceiling height not published"]},{"id":"mls-73492935","address":"90 School St","city":"Quincy","state":"MA","zip":"02169","price":1949000,"price_psf":139.21,"building_sf":14000,"lot_acres":0.23,"parking_spaces":null,"parking_type":null,"parking_ratio_per_1000":null,"ceiling_ft":20,"year_built":1930,"stories":null,"property_type":"Industrial","subtype":"Warehouse / manufacturing","building_class":null,"zoning":"BUSB","tenancy":null,"dock_high_doors":1,"drive_in_doors":3,"sale_type":"For sale","status":"Listed for sale 2026-03-27 at $1,949,000. LoopNet lease page for this address is no longer advertised.","listed":"for sale","broker":null,"sources":["https://mytownandcountryrealty.com/ma-real-estate/quincy/90-school-0-mls-73492935","https://www.loopnet.com/Listing/90-School-St-Quincy-MA/11587527/"],"summary":"Stand-alone warehouse about 14,000 SF, brick exterior, 440 AMP, new rubber roof and utilities from the street. LoopNet lease writeup (older) mentioned three 10-ft drive-ins, a van-height dock, and potential 20-ft clear. 0.23-acre lot is too small for 60 cars.","meets_sf":false,"meets_parking":false,"meets_ceiling":true,"meets_sale":true,"strict_match":false,"fail_reasons":["14,000 SF is over 10,000","0.23-acre lot cannot support 60 parking"]},{"id":"mls-73549466","address":"11-17 Newbury St","city":"Quincy","state":"MA","zip":"02171","price":2500000,"price_psf":178.88,"building_sf":13976,"lot_acres":0.23,"parking_spaces":null,"parking_type":null,"parking_ratio_per_1000":null,"ceiling_ft":null,"year_built":1930,"stories":null,"property_type":"Mixed use","subtype":"Commercial / residential development","building_class":null,"zoning":null,"tenancy":"Multi (four units leased through 2031, one vacant)","dock_high_doors":null,"drive_in_doors":null,"sale_type":"Investment / development","status":"Listed 2026-07-14 at $2,500,000. Appraised $3.45M in 2025 per listing copy.","listed":"for sale","broker":null,"sources":["https://homesofnhrealty.com/ma-real-estate/quincy/11-17-newbury-st-mls-73549466"],"summary":"Mixed-use with five commercial units. Too large, small lot, not industrial warehouse. Previously approved for 18-unit residential (buyer diligence required). Separate listing also advertised ~2,100 SF warehouse for lease in this building with 25-ft ceilings and 5–8 parking — that unit is lease-only and far under 6,000 SF.","meets_sf":false,"meets_parking":false,"meets_ceiling":null,"meets_sale":true,"strict_match":false,"fail_reasons":["13,976 SF is over 10,000","lot 0.23 acres cannot support 60 parking","not a single industrial user building"]}],"sources_checked":["LoopNet","Cityfeet","Crexi","MLS / LandVest / Town & Country"]};
-
-let selectedId = null;
-
-function money(n) {
-  if (n == null) return "—";
-  return "$" + Number(n).toLocaleString();
-}
-function num(n, suffix) {
-  if (n == null || n === "") return "unknown";
-  return n + (suffix || "");
-}
-function pill(ok, label) {
-  const cls = ok === true ? "yes" : ok === false ? "no" : "unk";
-  const tag = ok === true ? "yes" : ok === false ? "no" : "?";
-  return `<span class="pill ${cls}">${label}: ${tag}</span>`;
-}
-
-function scoreProperty(p) {
-  let s = 0;
-  if (p.meets_sf === true) s += 30;
-  else if (p.building_sf && p.building_sf >= 5000 && p.building_sf <= 12000) s += 15;
-  if (p.meets_parking === true) s += 35;
-  else if (p.parking_spaces && p.parking_spaces >= 30) s += 12;
-  else if (p.lot_acres && p.lot_acres >= 0.5) s += 8;
-  if (p.meets_ceiling === true) s += 20;
-  else if (p.ceiling_ft && p.ceiling_ft >= 12) s += 10;
-  if (p.meets_sale === true) s += 15;
-  if (p.strict_match) s = 100;
-  return Math.min(100, s);
-}
-
-function recText(p, score) {
-  if (score >= 70) return "Strong candidate — prioritize outreach.";
-  if (score >= 45) return "Partial match — monitor or negotiate on weak points.";
-  if (p.meets_sale && p.building_sf > 10000) return "Oversized for target band; only pursue if flexible on size.";
-  if (!p.meets_sale) return "Status uncertain / off-market — verify before spending time.";
-  return "Low fit — parking or lot size is the primary blocker.";
-}
-
-function render() {
-  const data = DATA;
-  document.getElementById("updatedLabel").textContent = "Updated " + (data.generated_at_et || data.generated_at || "—");
-
-  const strict = data.strict_match_count || 0;
-  const total = data.listing_count || (data.listings || []).length;
-  const forSale = (data.listings || []).filter(p => p.meets_sale).length;
-
-  document.getElementById("metrics").innerHTML = `
-    <div class="metric ${strict ? "good" : "bad"}">
-      <div class="label">Strict Matches</div>
-      <div class="value">${strict}</div>
-      <div class="sub">full criteria</div>
-    </div>
-    <div class="metric">
-      <div class="label">Candidates</div>
-      <div class="value">${total}</div>
-      <div class="sub">in latest check</div>
-    </div>
-    <div class="metric">
-      <div class="label">For Sale</div>
-      <div class="value">${forSale}</div>
-      <div class="sub">active listings</div>
-    </div>
-    <div class="metric">
-      <div class="label">Target Size</div>
-      <div class="value">${data.criteria.building_sf_min.toLocaleString()}–${data.criteria.building_sf_max.toLocaleString()}</div>
-      <div class="sub">square feet</div>
-    </div>
-    <div class="metric">
-      <div class="label">Min Parking</div>
-      <div class="value">${data.criteria.parking_min}+</div>
-      <div class="sub">spaces</div>
-    </div>
-  `;
-
-  document.getElementById("overviewNotes").innerHTML = (data.notes || []).map(n => `<div>• ${n}</div>`).join("");
-
-  document.getElementById("overviewCards").innerHTML = (data.listings || []).map(p => {
-    const sc = scoreProperty(p);
-    return `<div class="card">
-      <h3>${p.address}, ${p.city}</h3>
-      <div class="meta">${p.property_type || ""} · ${p.subtype || ""} · ${money(p.price)}</div>
-      <div class="pills">
-        ${pill(p.strict_match, "strict")}
-        ${pill(p.meets_sf, "size")}
-        ${pill(p.meets_parking, "parking")}
-        ${pill(p.meets_ceiling, "ceiling")}
-        ${pill(p.meets_sale, "sale")}
-      </div>
-      <div style="font-size:11.5px;color:var(--muted)">AI score ${sc}/100 · ${recText(p, sc)}</div>
-    </div>`;
-  }).join("") || "<div class='empty'>No listings</div>";
-
-  // Property list
-  const list = document.getElementById("propList");
-  list.innerHTML = (data.listings || []).map(p => `
-    <div class="prop-item ${selectedId === p.id ? "active" : ""}" data-id="${p.id}">
-      <div class="addr">${p.address}</div>
-      <div class="sub">${p.city} · ${money(p.price)} · ${num(p.building_sf, " sf")}</div>
-    </div>
-  `).join("") || "<div class='empty'>No listings</div>";
-
-  list.querySelectorAll(".prop-item").forEach(el => {
-    el.onclick = () => {
-      selectedId = el.dataset.id;
-      render();
-      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-      document.querySelector('[data-tab="properties"]').classList.add("active");
-      document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
-      document.getElementById("panel-properties").classList.add("active");
-    };
-  });
-
-  const detail = document.getElementById("propDetail");
-  const sel = (data.listings || []).find(p => p.id === selectedId);
-  if (!sel) {
-    detail.innerHTML = `<div class="empty">Select a property from the list</div>`;
-  } else {
-    const src = (sel.sources || []).map(u => `<a href="${u}" target="_blank" rel="noopener">${u.replace(/^https?:\/\//,"")}</a>`).join("<br>");
-    const fails = (sel.fail_reasons || []).length ? `<p class="fails">${sel.fail_reasons.join(" · ")}</p>` : "";
-    detail.innerHTML = `
-      <h2>${sel.address}, ${sel.city}, ${sel.state} ${sel.zip || ""}</h2>
-      <div class="status-line">${sel.property_type || ""} · ${sel.subtype || ""} · ${sel.status || ""}</div>
-      <div class="pills">
-        ${pill(sel.strict_match, "strict")}
-        ${pill(sel.meets_sf, "size")}
-        ${pill(sel.meets_parking, "parking")}
-        ${pill(sel.meets_ceiling, "ceiling")}
-        ${pill(sel.meets_sale, "for sale")}
-      </div>
-      <dl>
-        <dt>Price</dt><dd>${money(sel.price)}${sel.price_psf ? " (" + money(sel.price_psf) + "/sf)" : ""}</dd>
-        <dt>Building</dt><dd>${num(sel.building_sf, " sf")}</dd>
-        <dt>Lot</dt><dd>${num(sel.lot_acres, " acres")}</dd>
-        <dt>Parking</dt><dd>${sel.parking_spaces != null ? sel.parking_spaces + " spaces" : "unknown"}${sel.parking_type ? " · " + sel.parking_type : ""}</dd>
-        <dt>Ceiling</dt><dd>${sel.ceiling_ft != null ? sel.ceiling_ft + " ft" : "unknown"}</dd>
-        <dt>Year</dt><dd>${num(sel.year_built)}</dd>
-        <dt>Loading</dt><dd>docks ${num(sel.dock_high_doors)} · drive-ins ${num(sel.drive_in_doors)}</dd>
-        <dt>Zoning</dt><dd>${sel.zoning || "unknown"}</dd>
-        <dt>Broker</dt><dd>${sel.broker || "unknown"}</dd>
-        <dt>Summary</dt><dd>${sel.summary || ""}</dd>
-        <dt>Links</dt><dd>${src}</dd>
-      </dl>
-      ${fails}
-    `;
+let DATA=null, selectedId=null;
+function money(n){return n==null?"—":"$"+Number(n).toLocaleString();}
+function num(n,s){return (n==null||n==="")?"unknown":n+(s||"");}
+function pill(ok,l){const c=ok===true?"yes":ok===false?"no":"unk";const t=ok===true?"yes":ok===false?"no":"?";return '<span class="pill '+c+'">'+l+': '+t+'</span>';}
+function score(p){let s=0;if(p.meets_sf===true)s+=30;else if(p.building_sf&&p.building_sf>=5000&&p.building_sf<=12000)s+=15;if(p.meets_parking===true)s+=35;else if(p.parking_spaces&&p.parking_spaces>=30)s+=12;else if(p.lot_acres&&p.lot_acres>=0.5)s+=8;if(p.meets_ceiling===true)s+=20;else if(p.ceiling_ft&&p.ceiling_ft>=12)s+=10;if(p.meets_sale===true)s+=15;if(p.strict_match)s=100;return Math.min(100,s);}
+function rec(p,s){if(s>=70)return "Strong candidate — prioritize outreach.";if(s>=45)return "Partial match — monitor or negotiate on weak points.";if(p.meets_sale&&p.building_sf>10000)return "Oversized for target band.";if(!p.meets_sale)return "Status uncertain / off-market.";return "Low fit — parking or lot size is the blocker.";}
+function render(){
+  const d=DATA;const list=d.listings||[];
+  document.getElementById("updatedLabel").textContent="Updated "+(d.generated_at_et||d.generated_at);
+  const strict=d.strict_match_count||0, total=d.listing_count||list.length, sale=list.filter(p=>p.meets_sale).length;
+  document.getElementById("metrics").innerHTML='<div class="metric"><div class="l">Strict Matches</div><div class="v" style="color:#ef4444">'+strict+'</div></div><div class="metric"><div class="l">Candidates</div><div class="v">'+total+'</div></div><div class="metric"><div class="l">For Sale</div><div class="v">'+sale+'</div></div><div class="metric"><div class="l">Target Size</div><div class="v">6k–10k</div></div><div class="metric"><div class="l">Min Parking</div><div class="v">60+</div></div>';
+  document.getElementById("notes").innerHTML=(d.notes||[]).map(n=>"<div>• "+n+"</div>").join("");
+  document.getElementById("cards").innerHTML=list.map(p=>{const s=score(p);return '<div class="card"><h3>'+p.address+', '+p.city+'</h3><div class="meta">'+(p.subtype||p.property_type||'')+' · '+money(p.price)+'</div><div>'+pill(p.strict_match,'strict')+pill(p.meets_sf,'size')+pill(p.meets_parking,'parking')+pill(p.meets_ceiling,'ceiling')+pill(p.meets_sale,'sale')+'</div><div class="meta">AI '+s+'/100 · '+rec(p,s)+'</div></div>';}).join('');
+  document.getElementById("plist").innerHTML=list.map(p=>'<div class="pi'+(selectedId===p.id?' on':'')+'" data-id="'+p.id+'"><b>'+p.address+'</b><div class="meta">'+p.city+' · '+money(p.price)+' · '+num(p.building_sf,' sf')+'</div></div>').join('');
+  document.querySelectorAll('.pi').forEach(el=>el.onclick=()=>{selectedId=el.dataset.id;render();show('properties');});
+  const sel=list.find(p=>p.id===selectedId);
+  const box=document.getElementById('detail');
+  if(!sel){box.textContent='Select a property';}
+  else{
+    const src=(sel.sources||[]).map(u=>'<a href="'+u+'" target="_blank" rel="noopener">'+u.replace(/^https?:\/\//,'')+'</a>').join('<br>');
+    box.innerHTML='<h2>'+sel.address+', '+sel.city+'</h2><div class="meta">'+(sel.status||sel.listed||'')+'</div><div>'+pill(sel.strict_match,'strict')+pill(sel.meets_sf,'size')+pill(sel.meets_parking,'parking')+pill(sel.meets_ceiling,'ceiling')+pill(sel.meets_sale,'sale')+'</div><dl><dt>Price</dt><dd>'+money(sel.price)+'</dd><dt>Building</dt><dd>'+num(sel.building_sf,' sf')+'</dd><dt>Lot</dt><dd>'+num(sel.lot_acres,' acres')+'</dd><dt>Parking</dt><dd>'+(sel.parking_spaces!=null?sel.parking_spaces+' spaces':'unknown')+'</dd><dt>Ceiling</dt><dd>'+(sel.ceiling_ft!=null?sel.ceiling_ft+' ft':'unknown')+'</dd><dt>Broker</dt><dd>'+(sel.broker||'unknown')+'</dd><dt>Summary</dt><dd>'+(sel.summary||'')+'</dd><dt>Links</dt><dd>'+src+'</dd></dl>'+((sel.fail_reasons||[]).length?'<p class="fail">'+sel.fail_reasons.join(' · ')+'</p>':'');
   }
-
-  // AI
-  const ranked = (data.listings || []).map(p => ({ p, score: scoreProperty(p) }))
-    .sort((a, b) => b.score - a.score);
-  document.getElementById("aiList").innerHTML = ranked.map(({ p, score }) => {
-    const cls = score >= 60 ? "high" : score >= 35 ? "mid" : "low";
-    return `<div class="ai-card">
-      <div class="ai-score ${cls}">${score}</div>
-      <div class="ai-body">
-        <h3>${p.address}, ${p.city}</h3>
-        <div class="rec">${recText(p, score)}</div>
-        <div class="reason">${(p.fail_reasons || []).join(" · ") || "No major fail reasons"} · ${money(p.price)} · ${num(p.building_sf, " sf")}</div>
-      </div>
-    </div>`;
-  }).join("") || "<div class='empty'>No listings</div>";
-
-  // Feed
-  const feedItems = [];
-  const ts = data.generated_at_et || "latest";
-  feedItems.push({ time: ts, text: `Daily check completed · ${total} candidates · ${strict} strict matches`, type: strict ? "good" : "warn" });
-  (data.notes || []).forEach(n => feedItems.push({ time: ts, text: n, type: "warn" }));
-  (data.sources_checked || []).forEach(s => feedItems.push({ time: ts, text: `Source checked: ${s}`, type: "" }));
-  (data.listings || []).forEach(p => {
-    if (!p.meets_sale) feedItems.push({ time: ts, text: `${p.address} — status uncertain / off-market`, type: "bad" });
-    if (p.strict_match) feedItems.push({ time: ts, text: `STRICT MATCH found: ${p.address}`, type: "good" });
-  });
-  document.getElementById("feedList").innerHTML = feedItems.map(f => `
-    <div class="feed-item">
-      <div class="feed-dot ${f.type}"></div>
-      <div>
-        <div class="feed-time">${f.time}</div>
-        <div class="feed-text">${f.text}</div>
-      </div>
-    </div>
-  `).join("");
+  const ranked=list.map(p=>({p,s:score(p)})).sort((a,b)=>b.s-a.s);
+  document.getElementById('ai').innerHTML=ranked.map(({p,s})=>'<div class="card ai"><div class="sc '+(s>=60?'hi':s>=35?'md':'lo')+'">'+s+'</div><div><h3>'+p.address+', '+p.city+'</h3><div class="meta">'+rec(p,s)+'</div><div class="meta">'+(p.fail_reasons||[]).join(' · ')+'</div></div></div>').join('');
+  document.getElementById('feed').innerHTML=['Check completed · '+total+' candidates · '+strict+' strict matches'].concat(d.notes||[]).map(t=>'<div><div class="meta">'+(d.generated_at_et||'')+'</div>'+t+'</div>').join('');
 }
-
-document.getElementById("tabs").addEventListener("click", (e) => {
-  const tab = e.target.closest(".tab");
-  if (!tab) return;
-  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-  tab.classList.add("active");
-  document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
-  document.getElementById("panel-" + tab.dataset.tab).classList.add("active");
-});
-
-render();
+function show(id){document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.tab===id));document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='panel-'+id));}
+document.getElementById('tabs').onclick=e=>{const t=e.target.closest('.tab');if(t)show(t.dataset.tab);};
+async function boot(){
+  try{
+    const r=await fetch('./quincy-properties.json?t='+Date.now(),{cache:'no-store'});
+    if(!r.ok) throw new Error(r.status);
+    DATA=await r.json();
+  }catch(e){
+    DATA={generated_at_et:'Tue Sep 15, 2026 1:20am ET',strict_match_count:0,listing_count:14,criteria:{building_sf_min:6000,building_sf_max:10000,parking_min:60},notes:['Live JSON did not load ('+e.message+'). Showing fallback snapshot from Sep 15.'],listings:[]};
+  }
+  render();
+}
+boot();
 </script>
 </body>
 </html>
