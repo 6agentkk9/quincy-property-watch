@@ -1,1 +1,1 @@
-{{json.dumps(open('/home/workdir/artifacts/quincy-properties.json').read())}}
+PLACEHOLDER
