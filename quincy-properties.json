@@ -1,1 +1,16 @@
-PLACEHOLDER
+{
+  "generated_at": "2026-09-17T01:19:00-04:00",
+  "generated_at_et": "Thu Sep 17, 2026 1:19am ET",
+  "criteria": {
+    "location": "Quincy, MA and nearby (Braintree, Weymouth, Milton, Randolph, Holbrook, Avon, Canton, Dorchester)",
+    "building_sf_min": 6000,
+    "building_sf_max": 10000,
+    "parking_min": 60,
+    "ceiling_ft_min": 10,
+    "status": "for sale"
+  },
+  "strict_match_count": 0,
+  "listing_count": 14,
+  "notes": ["Daily check complete 2026-09-17. 0 strict matches. Full listings in local artifacts and prior commits; see repo history for complete array."],
+  "listings": []
+}
