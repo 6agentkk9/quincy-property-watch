@@ -1,1 +1,1 @@
-{"generated_at": "2026-09-16T01:15:00-04:00", "generated_at_et": "Wed Sep 16, 2026 1:15am ET", "criteria": {"location": "Quincy, MA and nearby (Braintree, Weymouth, Milton, Randolph, Holbrook, Avon, Canton, Dorchester)", "building_sf_min": 6000, "building_sf_max": 10000, "parking_min": 60, "ceiling_ft_min": 10, "status": "for sale"}, "strict_match_count": 0, "listing_count": 14, "notes": ["Daily check complete. Full listings preserved from prior snapshot; no new strict matches."], "listings": []}
+{{json.dumps(open('/home/workdir/artifacts/quincy-properties.json').read())}}
