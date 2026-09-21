@@ -1,132 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Quincy Property Watch</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:#f3f5f8;color:#1b2430;font:15px/1.5 Segoe UI,system-ui,sans-serif}
-header{background:#fff;border-bottom:1px solid #d5dde6;padding:14px 20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:20}
-h1{font-size:20px}.live{background:#dcfce7;color:#166534;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px}
-.updated{color:#5b6b7c;font-weight:600}
-.tabs{display:flex;gap:4px;padding:8px 20px 0;border-bottom:1px solid #d5dde6;overflow:auto}
-.tab{padding:9px 14px;border:1px solid transparent;border-bottom:none;border-radius:8px 8px 0 0;background:transparent;color:#5b6b7c;cursor:pointer;font-weight:650;font-size:13px}
-.tab.on{background:#fff;color:#1b2430;border-color:#d5dde6}
-main{max-width:1000px;margin:0 auto;padding:16px 20px 48px}
-.panel{display:none}.panel.on{display:block}
-.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:12px}
-.metric,.card,.watch,.banner{background:#fff;border:1px solid #d5dde6;border-radius:12px;padding:12px;margin-bottom:10px}
-.watch{background:#eff6ff;border-color:#93c5fd}
-.banner{background:#fffbeb;border-color:#fcd34d;color:#78350f}
-.metric span{color:#5b6b7c;font-size:11px;text-transform:uppercase}.metric b{display:block;font-size:22px}
+body{margin:0;background:#f3f5f8;color:#1b2430;font:15px/1.5 Segoe UI,system-ui,sans-serif}
+header{background:#fff;border-bottom:1px solid #d5dde6;padding:14px 20px;display:flex;justify-content:space-between;flex-wrap:wrap}
+h1{margin:0;font-size:20px}.live{background:#dcfce7;color:#166534;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px}
 .meta{color:#5b6b7c;font-size:13px;margin:4px 0}
-.pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;margin:0 4px 4px 0;font-weight:600}
-.yes{background:#dcfce7;color:#166534}.no{background:#fee2e2;color:#991b1b}.unk{background:#fef3c7;color:#92400e}
-.layout{display:grid;grid-template-columns:230px 1fr;gap:12px}
-@media(max-width:740px){.layout{grid-template-columns:1fr}}
-.plist{background:#fff;border:1px solid #d5dde6;border-radius:12px;max-height:70vh;overflow:auto}
-.pi{padding:10px 12px;border-bottom:1px solid #d5dde6;cursor:pointer}
-.pi.on{background:#eff6ff;border-left:3px solid #1d4ed8}
-.pdetail{background:#fff;border:1px solid #d5dde6;border-radius:12px;padding:16px}
-.detail{display:none}.detail.on{display:block}
-.ai{display:grid;grid-template-columns:52px 1fr;gap:12px}
-.sc{width:52px;height:52px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800}
-.hi{background:#dcfce7;color:#166534}.md{background:#fef3c7;color:#92400e}.lo{background:#fee2e2;color:#991b1b}
-.fi{padding:10px 0;border-bottom:1px solid #d5dde6}
-footer{text-align:center;color:#5b6b7c;font-size:12px;padding:18px}
-</style>
-</head>
-<body>
-<header>
-  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><h1>Quincy Property Watch</h1><span class="live">LIVE</span></div>
-  <div class="updated">Updated Mon Sep 21, 2026 7:14am ET</div>
-</header>
-<nav class="tabs" id="tabs">
-  <button type="button" class="tab on" data-tab="overview">Overview</button>
-  <button type="button" class="tab" data-tab="properties">Properties</button>
-  <button type="button" class="tab" data-tab="ai">AI Recommendations</button>
-  <button type="button" class="tab" data-tab="feed">Live Feed</button>
-</nav>
+main{max-width:980px;margin:0 auto;padding:16px 20px 40px}
+.card,.banner{background:#fff;border:1px solid #d5dde6;border-radius:12px;padding:14px;margin-bottom:10px}
+.banner{background:#fffbeb;border-color:#fcd34d}
+.links{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+a.btn{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:650;text-decoration:none}
+a.btn:hover{background:#dbeafe}
+footer{text-align:center;color:#5b6b7c;font-size:12px;padding:16px}
+</style></head><body>
+<header><div><h1>Quincy Property Watch</h1> <span class="live">LIVE</span></div>
+<div class="meta">Updated Mon Sep 21, 2026 7:14am ET</div></header>
 <main>
-<section class="panel on" id="panel-overview">
-  <div class="metrics">
-    <div class="metric"><span>Strict Matches</span><b style="color:#b91c1c">0</b></div>
-    <div class="metric"><span>Candidates</span><b>17</b></div>
-    <div class="metric"><span>For Sale</span><b>13</b></div>
-    <div class="metric"><span>Target</span><b>6k–10k</b></div>
-    <div class="metric"><span>Min Parking</span><b>60+</b></div>
-  </div>
-  <div class="watch"><b>North Quincy T station watch</b><p class="meta">No 6–10k warehouse with 60+ parking at the T. Closest: 11-17 Newbury (9,773 SF / 16 park), 125-133 Billings pending $1.488M, 80 Sagamore $1.35M, Chase 315 Hancock $6.38M.</p></div>
-  <div class="banner">Still 0 strict matches. Click Properties for each listing, AI for scores, Live Feed for the check log.</div>
-  <div class="card"><h3>8 Carver Circle, Canton</h3><div class="meta">9,804 SF · 14-ft · 5+ park</div><span class="pill yes">size: yes</span><span class="pill no">parking: no</span><span class="pill yes">ceiling: yes</span><span class="pill yes">sale: yes</span></div>
-  <div class="card"><h3>13 Robbie Rd, Avon</h3><div class="meta">8,349 SF · 20-ft · 28 park</div><span class="pill yes">size: yes</span><span class="pill no">parking: no</span><span class="pill yes">ceiling: yes</span><span class="pill yes">sale: yes</span></div>
-  <div class="card"><h3>11-17 Newbury St, Quincy</h3><div class="meta">9,773 SF · 16 park · NQ T · $2.5M / $3.5M syndicate</div><span class="pill yes">size: yes</span><span class="pill no">parking: no</span><span class="pill yes">sale: yes</span></div>
-  <div class="card"><h3>634 Willard St, Quincy</h3><div class="meta">9,666 SF · $2.0M · 0.29 acres</div><span class="pill yes">size: yes</span><span class="pill no">parking: no</span><span class="pill yes">sale: yes</span></div>
-</section>
-<section class="panel" id="panel-properties">
-  <div class="layout">
-    <div class="plist" id="plist">
-      <div class="pi on" data-id="carver"><b>8 Carver Circle</b><div class="meta">Canton</div></div>
-      <div class="pi" data-id="robbie"><b>13 Robbie Rd</b><div class="meta">Avon</div></div>
-      <div class="pi" data-id="newbury"><b>11-17 Newbury St</b><div class="meta">North Quincy T</div></div>
-      <div class="pi" data-id="billings"><b>125-133 Billings Rd</b><div class="meta">North Quincy T</div></div>
-      <div class="pi" data-id="sagamore"><b>80 Sagamore St</b><div class="meta">North Quincy T</div></div>
-      <div class="pi" data-id="chase"><b>315 Hancock St</b><div class="meta">NQ T entrance</div></div>
-      <div class="pi" data-id="willard"><b>634 Willard St</b><div class="meta">Quincy</div></div>
-      <div class="pi" data-id="glendale"><b>27 Glendale Rd</b><div class="meta">Watch</div></div>
-      <div class="pi" data-id="quarry"><b>100 Quarry Hills Dr</b><div class="meta">Watch</div></div>
-    </div>
-    <div class="pdetail">
-      <section class="detail on" data-id="carver"><h2>8 Carver Circle, Canton</h2><p>9,804 SF distribution, 14-ft clear, 3 docks, published parking 5+. Best size+ceiling+sale near-miss.</p></section>
-      <section class="detail" data-id="robbie"><h2>13 Robbie Rd, Avon</h2><p>8,349 SF condo warehouse, 20-ft clear, 28 parking. Best ceiling near-miss.</p></section>
-      <section class="detail" data-id="newbury"><h2>11-17 Newbury St, Quincy</h2><p>9,773 SF brick near North Quincy T. Warehouse area occupied by Trust 1. 16 published parking. Pending/active syndication mix $2.5M–$3.5M.</p></section>
-      <section class="detail" data-id="billings"><h2>125-133 Billings Rd, Quincy</h2><p>Four-unit brick mixed-use steps from NQ T. Pending $1,488,000. Not industrial.</p></section>
-      <section class="detail" data-id="sagamore"><h2>80 Sagamore St, Quincy</h2><p>5,986 SF office/retail, $1.35M Active, minutes from NQ T. 0.16-acre lot.</p></section>
-      <section class="detail" data-id="chase"><h2>315 Hancock St, Quincy</h2><p>Chase Bank NNN ground lease at the T entrance. $6.38M / 2,894 SF. Investment, not a warehouse.</p></section>
-      <section class="detail" data-id="willard"><h2>634 Willard St, Quincy</h2><p>9,666 SF industrial $2.0M. Lot 0.29 acres cannot support 60 parking.</p></section>
-      <section class="detail" data-id="glendale"><h2>27 Glendale Rd, Quincy</h2><p>Lodge/meeting hall, 16,977 SF, 128 published parking. Not a priced industrial sale.</p></section>
-      <section class="detail" data-id="quarry"><h2>100 Quarry Hills Dr, Quincy</h2><p>City-leased Granite Links campus. Draft lease prohibits warehousing.</p></section>
-    </div>
-  </div>
-</section>
-<section class="panel" id="panel-ai">
-  <div class="banner">Heuristic scores vs 6–10k SF, 60+ parking, &gt;10 ft, for sale.</div>
-  <div class="card ai"><div class="sc md">50</div><div><h3>13 Robbie Rd, Avon</h3><div class="meta">Partial match — parking 28 is the miss.</div></div></div>
-  <div class="card ai"><div class="sc md">50</div><div><h3>8 Carver Circle, Canton</h3><div class="meta">Partial match — parking 5+ is the miss.</div></div></div>
-  <div class="card ai"><div class="sc md">45</div><div><h3>11-17 Newbury St, Quincy</h3><div class="meta">Size-band near NQ T; only 16 parking.</div></div></div>
-  <div class="card ai"><div class="sc lo">30</div><div><h3>315 Hancock St / 80 Sagamore / Billings</h3><div class="meta">NQ T cluster is mixed-use or NNN, not warehouse users.</div></div></div>
-</section>
-<section class="panel" id="panel-feed">
-  <div class="banner">Latest check Mon Sep 21, 2026 7:14am ET</div>
-  <div class="card">
-    <div class="fi"><div class="meta">Mon Sep 21, 2026 7:14am ET</div>Check completed · 17 candidates · 0 strict matches</div>
-    <div class="fi">North Quincy T watch added: Hancock / Billings / Newbury / Sagamore / 02171.</div>
-    <div class="fi">Jack Conway board still shows 80 Sagamore Active and 125-133 Billings Pending.</div>
-  </div>
-</section>
+<div class="banner">Every property has buttons that open the source listing (Showcase, LoopNet, Jack Conway, Crexi, broker sites).</div>
+
+<article class="card"><h3>8 Carver Circle, Canton</h3><div class="meta">9,804 SF · 14-ft · 5+ park</div>
+<div class="links"><a class="btn" href="https://www.showcase.com/8-carver-cir-canton-ma-02021/37370150/" target="_blank" rel="noopener">Showcase</a> <a class="btn" href="https://www.stubblebinecompany.com/property/8-carver-circle-canton-ma/" target="_blank" rel="noopener">Stubblebine</a> <a class="btn" href="https://stivalettaproperties.com/listing/mlspin/73455622/Canton/8-Carver-Cir/" target="_blank" rel="noopener">Stivaletta MLS</a></div></article>
+
+<article class="card"><h3>13 Robbie Rd, Avon</h3><div class="meta">8,349 SF · 20-ft · 28 park</div>
+<div class="links"><a class="btn" href="https://www.showcase.com/13-robbie-rd-avon-ma-02322/41297036/" target="_blank" rel="noopener">Showcase</a> <a class="btn" href="https://www.commercialcafe.com/commercial-property/us/ma/avon/13-robbie-road/" target="_blank" rel="noopener">CommercialCafe</a></div></article>
+
+<article class="card"><h3>11-17 Newbury St, Quincy</h3><div class="meta">9,773 SF · North Quincy T · 16 park</div>
+<div class="links"><a class="btn" href="https://www.jackconway.com/property/ma/02171/quincy/-/11-17-newbury-st/691635303d94da031d044694/" target="_blank" rel="noopener">Jack Conway</a> <a class="btn" href="https://www.raveis.com/prop/73454623/11-17-newbury-st-quincy-ma-02171" target="_blank" rel="noopener">Raveis</a></div></article>
+
+<article class="card"><h3>125-133 Billings Rd, Quincy</h3><div class="meta">Pending $1,488,000 · steps from NQ T</div>
+<div class="links"><a class="btn" href="https://www.jackconway.com/area/quincy-ma-commercial-listings/" target="_blank" rel="noopener">Jack Conway board</a> <a class="btn" href="https://www.agentviewsites.com/commercial-for-sale/MA/Quincy" target="_blank" rel="noopener">Quincy commercial board</a></div></article>
+
+<article class="card"><h3>80 Sagamore St, Quincy</h3><div class="meta">5,986 SF · $1,350,000 · minutes from NQ T</div>
+<div class="links"><a class="btn" href="https://www.jackconway.com/area/quincy-ma-commercial-listings/" target="_blank" rel="noopener">Jack Conway</a> <a class="btn" href="https://www.landvest.com/commercial/int/ma5355/80-sagamore-st-quincy-ma-02171" target="_blank" rel="noopener">LandVest</a> <a class="btn" href="https://www.raveis.com/prop/73528185/80-sagamore-st-quincy-ma-02171" target="_blank" rel="noopener">Raveis</a></div></article>
+
+<article class="card"><h3>315 Hancock St, Quincy</h3><div class="meta">Chase Bank at NQ T entrance · $6,380,000</div>
+<div class="links"><a class="btn" href="https://www.loopnet.com/Listing/315-Hancock-St-Quincy-MA/40172938/" target="_blank" rel="noopener">LoopNet</a> <a class="btn" href="https://www.crexi.com/properties/2459874/massachusetts-chase-bank" target="_blank" rel="noopener">Crexi</a></div></article>
+
+<article class="card"><h3>634 Willard St, Quincy</h3><div class="meta">9,666 SF · $2,000,000</div>
+<div class="links"><a class="btn" href="https://www.jackconway.com/area/quincy-ma-commercial-listings/" target="_blank" rel="noopener">Jack Conway</a> <a class="btn" href="https://www.showcase.com/ma/quincy-ma/industrial-space/for-sale/" target="_blank" rel="noopener">Showcase</a></div></article>
+
+<article class="card"><h3>64-74 Bates Ave, Quincy</h3><div class="meta">6,242 SF · $2,200,000</div>
+<div class="links"><a class="btn" href="https://oakrealtyma.com/listing/mlspin/73549541/Quincy/64-74-Bates-Ave/" target="_blank" rel="noopener">Oak Realty</a> <a class="btn" href="https://www.coldwellbankerhomes.com/ma/quincy/64-74-bates-ave/pid_72508275/" target="_blank" rel="noopener">Coldwell</a></div></article>
+
+<article class="card"><h3>40 Oval Rd, Quincy</h3><div class="meta">6,342 SF · $1,800,000</div>
+<div class="links"><a class="btn" href="https://www.jackconway.com/area/quincy-ma-commercial-listings/" target="_blank" rel="noopener">Jack Conway</a> <a class="btn" href="https://www.cityfeet.com/cont/listing/40-oval-rd-quincy-ma-02170/cs40453072" target="_blank" rel="noopener">Cityfeet</a></div></article>
+
+<article class="card"><h3>42-52 Federal Ave, Quincy</h3><div class="meta">11,943 SF · $1,900,000</div>
+<div class="links"><a class="btn" href="https://www.jackconway.com/property/ma/02169/quincy/-/42-52-federal-ave/68f8f6c73d94da031d229e1f/" target="_blank" rel="noopener">Jack Conway</a></div></article>
+
+<article class="card"><h3>60 Garden Park, Braintree</h3><div class="meta">12,000 SF · 17 acres</div>
+<div class="links"><a class="btn" href="https://www.showcase.com/60-garden-park-braintree-ma-02184/33806559/" target="_blank" rel="noopener">Showcase</a> <a class="btn" href="https://www.cityfeet.com/cont/listing/60-garden-park-braintree-ma-02184/cs33806559" target="_blank" rel="noopener">Cityfeet</a></div></article>
+
+<article class="card"><h3>20 Strafello Dr, Avon</h3><div class="meta">44,000 SF · $6,750,000 · 80 park · 18-ft</div>
+<div class="links"><a class="btn" href="https://www.showcase.com/20-strafello-dr-avon-ma-02322/39710486/" target="_blank" rel="noopener">Showcase</a> <a class="btn" href="https://www.cityfeet.com/cont/listing/20-strafello-dr-avon-ma-02322/cs39710486" target="_blank" rel="noopener">Cityfeet</a></div></article>
+
+<article class="card"><h3>40 Mathewson Dr, Weymouth</h3><div class="meta">5,997 SF warehouse</div>
+<div class="links"><a class="btn" href="https://www.showcase.com/ma/south-weymouth/warehouses/for-sale/" target="_blank" rel="noopener">Showcase</a> <a class="btn" href="https://realmo.com/property/40-mathewson-dr-weymouth-ma-02189-2346/us38-1867763" target="_blank" rel="noopener">Realmo</a></div></article>
+
+<article class="card"><h3>90-100 Columbia St, Quincy</h3><div class="meta">7,104 SF · 15-ft · historic $3.5M</div>
+<div class="links"><a class="btn" href="https://www.loopnet.com/Listing/90-100-Columbia-St-Quincy-MA/31381504/" target="_blank" rel="noopener">LoopNet</a> <a class="btn" href="https://www.cityfeet.com/cont/listing/90-100-columbia-st-quincy-ma-02169/cs31381504" target="_blank" rel="noopener">Cityfeet</a></div></article>
+
+<article class="card"><h3>2 Whitman Rd, Canton</h3><div class="meta">12,000 SF · 3.7 acres · unconfirmed sale flag</div>
+<div class="links"><a class="btn" href="https://realmo.com/property/2-whitman-rd-canton-ma-02021/us38-0909371" target="_blank" rel="noopener">Realmo</a></div></article>
+
+<article class="card"><h3>27 Glendale Rd, Quincy</h3><div class="meta">Lodge watch · 16,977 SF · 128 park</div>
+<div class="links"><a class="btn" href="https://www.showcase.com/27-glendale-rd-quincy-ma-02169/38423476/" target="_blank" rel="noopener">Showcase</a> <a class="btn" href="https://www.cityfeet.com/cont/listing/27-glendale-rd-quincy-ma-02169/cs38423476" target="_blank" rel="noopener">Cityfeet</a></div></article>
+
+<article class="card"><h3>100 Quarry Hills Dr, Quincy</h3><div class="meta">City-leased campus · warehousing prohibited</div>
+<div class="links"><a class="btn" href="https://www.quincyma.gov/Document%20Center/Department/Municipal%20Finance/General%20Documents/Draft%20Quarry%20HIlls%20Lease%20%20-%20Proposed%20Second%20Amended%202024.pdf?t=202602251150470" target="_blank" rel="noopener">City draft lease</a></div></article>
+
 </main>
-<footer>Tabs are real buttons — Overview, Properties, AI, Live Feed<br>https://6agentkk9.github.io/quincy-property-watch/</footer>
-<script>
-(function(){
-  function show(id){
-    document.querySelectorAll('.tab').forEach(function(t){ t.classList.toggle('on', t.getAttribute('data-tab')===id); });
-    document.querySelectorAll('.panel').forEach(function(p){ p.classList.toggle('on', p.id==='panel-'+id); });
-  }
-  document.getElementById('tabs').addEventListener('click', function(ev){
-    var t=ev.target.closest('.tab');
-    if(!t) return;
-    ev.preventDefault();
-    show(t.getAttribute('data-tab'));
-  });
-  document.getElementById('plist').addEventListener('click', function(ev){
-    var item=ev.target.closest('.pi');
-    if(!item) return;
-    var id=item.getAttribute('data-id');
-    document.querySelectorAll('.pi').forEach(function(el){ el.classList.toggle('on', el.getAttribute('data-id')===id); });
-    document.querySelectorAll('.detail').forEach(function(el){ el.classList.toggle('on', el.getAttribute('data-id')===id); });
-  });
-})();
-</script>
-</body>
-</html>
+<footer>Links open in a new tab. Hard-refresh if you still see the old page without buttons.</footer>
+</body></html>
