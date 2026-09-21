@@ -1,1 +1,109 @@
-PLACEHOLDER
+{
+  "generated_at": "2026-09-21T07:14:10-04:00",
+  "generated_at_et": "Mon Sep 21, 2026 7:14am ET",
+  "criteria": {
+    "location": "Quincy, MA and nearby (Braintree, Weymouth, Milton, Randolph, Holbrook, Avon, Canton, Dorchester)",
+    "building_sf_min": 6000,
+    "building_sf_max": 10000,
+    "parking_min": 60,
+    "ceiling_ft_min": 10,
+    "status": "for sale"
+  },
+  "strict_match_count": 0,
+  "listing_count": 17,
+  "special_watch": {
+    "address": "27 Glendale Rd",
+    "city": "Quincy",
+    "state": "MA",
+    "zip": "02169",
+    "status_as_of": "2026-09-21",
+    "finding": "Unchanged into Mon Sep 21. Still active lease / redevelopment / ground-lease / BTS marketing. No published sale price. Lodge / meeting hall, not warehouse. Showcase publishes 128 parking.",
+    "building_sf": 16977,
+    "lot_acres": 3.3,
+    "parking_spaces_published": 128,
+    "ceiling_ft": null,
+    "zoning": "RESA",
+    "listed": "for lease / ground lease / build-to-suit; sale mentioned as an option but not confirmed as a priced industrial listing",
+    "broker": "Atlantic Retail"
+  },
+  "special_watch_north_quincy": {
+    "title": "North Quincy T Station commercial / industrial cluster",
+    "status_as_of": "2026-09-21",
+    "summary": "No 6–10k SF industrial user sale with 60+ parking within walking distance of North Quincy Red Line T. Closest: 80 Sagamore Active $1.35M; 125-133 Billings Pending $1.488M; 11-17 Newbury Active $3.5M (9,773 SF with warehouse area); 315 Hancock Chase Bank $6.38M ground lease.",
+    "key_listings": [
+      {"address": "80 Sagamore St", "status": "Active", "price": 1350000, "sf": 5986},
+      {"address": "125-133 Billings Rd", "status": "Pending", "price": 1488000},
+      {"address": "11-17 Newbury St", "status": "Active", "price": 3500000, "sf": 9773},
+      {"address": "315 Hancock St", "status": "Active investment", "price": 6380000, "sf": 2894}
+    ]
+  },
+  "notes": [
+    "Strict filter still 0 confirmed matches on 2026-09-21 (6–10k SF + 60+ parking + >10 ft + for sale).",
+    "North Quincy T: no warehouse user sale with 60+ parking. Best size-band with warehouse mention is 11-17 Newbury St.",
+    "Best near-misses remain 13 Robbie Rd Avon (8,349 SF / 20-ft / 28 park) and 8 Carver Cir Canton (9,804 SF / 14-ft / 5+ park).",
+    "27 Glendale Rd unchanged (lodge). 100 Quarry Hills Dr city-leased; lease prohibits warehousing.",
+    "Parking and ceiling never invented."
+  ],
+  "listings": [
+    {
+      "id": "stubblebine-8carver",
+      "address": "8 Carver Circle",
+      "city": "Canton",
+      "state": "MA",
+      "zip": "02021",
+      "building_sf": 9804,
+      "parking_spaces": 5,
+      "ceiling_ft": 14,
+      "property_type": "Industrial",
+      "subtype": "Distribution / Warehouse",
+      "listed": "for sale",
+      "status": "Active for sale and for lease as of Sep 21, 2026. Showcase still lists Distribution FOR SALE. MLS 73455622 Active.",
+      "summary": "9,804 SF freestanding industrial on 1.1 acres. 14-ft clear, 3 docks. Published parking only 5+. Strongest size + ceiling + sale match; fails strict parking.",
+      "meets_sf": true,
+      "meets_parking": false,
+      "meets_ceiling": true,
+      "meets_sale": true,
+      "strict_match": false,
+      "fail_reasons": ["published parking 5+ (need 60+)"]
+    },
+    {
+      "id": "robbie-13",
+      "address": "13 Robbie Rd",
+      "city": "Avon",
+      "state": "MA",
+      "zip": "02322",
+      "building_sf": 8349,
+      "parking_spaces": 28,
+      "ceiling_ft": 20,
+      "property_type": "Industrial",
+      "subtype": "Warehouse",
+      "listed": "for sale",
+      "summary": "Best size + ceiling + sale near-miss: 8,349 SF / 20-ft clear / 28 parking.",
+      "meets_sf": true,
+      "meets_parking": false,
+      "meets_ceiling": true,
+      "meets_sale": true,
+      "strict_match": false,
+      "fail_reasons": ["published parking 28 (need 60+)"]
+    },
+    {
+      "id": "willard-634",
+      "address": "634 Willard St",
+      "city": "Quincy",
+      "state": "MA",
+      "zip": "02169",
+      "price": 2000000,
+      "building_sf": 9666,
+      "lot_acres": 0.29,
+      "property_type": "Industrial",
+      "listed": "for sale",
+      "summary": "9,666 SF at $2.0M on 0.29 acres. Lot too small for 60 parking; ceiling unpublished.",
+      "meets_sf": true,
+      "meets_parking": false,
+      "meets_ceiling": null,
+      "meets_sale": true,
+      "strict_match": false,
+      "fail_reasons": ["parking unpublished; 0.29-acre lot cannot support 60 spaces", "ceiling height not published"]
+    }
+  ]
+}
